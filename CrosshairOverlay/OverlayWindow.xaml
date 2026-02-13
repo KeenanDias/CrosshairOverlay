@@ -1,0 +1,71 @@
+﻿<Window x:Class="CrosshairOverlay.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:CrosshairOverlay"
+        Title="Overlay" Width="200" Height="200"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Topmost="True" ShowInTaskbar="False">
+
+    <Window.Resources>
+        <local:InvertDoubleConverter x:Key="InvertDoubleConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+
+        <Grid.Resources>
+            <Style TargetType="Rectangle">
+                <Setter Property="Fill" Value="{Binding MainBrush}"/>
+                <Setter Property="Stroke" Value="{Binding OutlineBrush}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ShowOutlines}" Value="True">
+                        <Setter Property="StrokeThickness" Value="{Binding OutlineThickness}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ShowOutlines}" Value="False">
+                        <Setter Property="StrokeThickness" Value="0"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="Ellipse">
+                <Setter Property="Fill" Value="{Binding MainBrush}"/>
+                <Setter Property="Stroke" Value="{Binding OutlineBrush}"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ShowOutlines}" Value="True">
+                        <Setter Property="StrokeThickness" Value="{Binding OutlineThickness}"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ShowOutlines}" Value="False">
+                        <Setter Property="StrokeThickness" Value="0"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <Ellipse Width="{Binding DotSize}" Height="{Binding DotSize}" 
+                 Visibility="{Binding ShowDot, Converter={StaticResource BoolToVis}}"/>
+
+        <Rectangle Width="{Binding Thickness}" Height="{Binding Length}" VerticalAlignment="Center">
+            <Rectangle.RenderTransform>
+                <TranslateTransform Y="{Binding Gap, Converter={StaticResource InvertDoubleConverter}}"/>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+
+        <Rectangle Width="{Binding Thickness}" Height="{Binding Length}" VerticalAlignment="Center">
+            <Rectangle.RenderTransform>
+                <TranslateTransform Y="{Binding Gap}"/>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+
+        <Rectangle Width="{Binding Length}" Height="{Binding Thickness}" VerticalAlignment="Center">
+            <Rectangle.RenderTransform>
+                <TranslateTransform X="{Binding Gap, Converter={StaticResource InvertDoubleConverter}}"/>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+
+        <Rectangle Width="{Binding Length}" Height="{Binding Thickness}" VerticalAlignment="Center">
+            <Rectangle.RenderTransform>
+                <TranslateTransform X="{Binding Gap}"/>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+    </Grid>
+</Window>
